@@ -1,0 +1,32 @@
+<!-- The launcher icon: glyph.svg on the brand background, full bleed (each
+     platform rounds or masks the corners itself). The glyph spans about half
+     the canvas, inside Android's adaptive-icon safe zone (the middle 61%).
+     scripts/generate-icons.sh renders every platform's PNGs from this. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5ab0ff"/>
+      <stop offset="1" stop-color="#2463c9"/>
+    </linearGradient>
+  </defs>
+  <rect width="108" height="108" fill="url(#background)"/>
+  <!-- Same drawing as glyph.svg, centred -->
+  <svg x="23.65" y="23.65" width="62" height="62" viewBox="0 0 24 24">
+    <defs>
+      <mask id="front-cutouts" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+        <rect width="24" height="24" fill="#fff"/>
+        <circle cx="12.6" cy="6.4" r="1.9" fill="#000"/>
+        <polyline points="1,15 6.5,9.3 10,12.8 12.6,10.3 18,15.8" fill="none" stroke="#000"
+                  stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+      </mask>
+      <mask id="back-gap" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+        <rect width="24" height="24" fill="#fff"/>
+        <rect x="0.4" y="0.4" width="18.2" height="18.2" rx="4.6" fill="#000"/>
+      </mask>
+    </defs>
+    <g fill="#fff">
+      <rect x="6.5" y="6.5" width="15" height="15" rx="3.2" mask="url(#back-gap)"/>
+      <rect x="2" y="2" width="15" height="15" rx="3.2" mask="url(#front-cutouts)"/>
+    </g>
+  </svg>
+</svg>

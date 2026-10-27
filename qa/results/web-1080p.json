@@ -1,0 +1,311 @@
+{
+  "target": "web",
+  "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "size": "1920x1080",
+  "at": "2026-10-27T10:10:37.659Z",
+  "passed": 36,
+  "failed": 0,
+  "results": [
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Home opens on the first album; header and rails are reachable",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Back on Home asks before leaving; Cancel and Back both stay",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "An album link opens the album; grid and header remember focus; Back works",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Viewer: the filmstrip follows focus and Back lands on the photo last viewed",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Slideshow: controls in order; Back pauses, then leaves",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Search: the keyboard keeps a–z left to right in both languages",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Home search finds albums; OK opens one; Back returns to it (en)",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Album search finds that album's photos; Back returns to them (en)",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "Settings opens on the current speed; options and Back reachable",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "check",
+      "name": "A photo link opens the viewer on that photo; Back goes Home",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "home",
+      "ok": true,
+      "issues": [],
+      "items": 7,
+      "edges": 26,
+      "presses": 45
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "exit dialog",
+      "ok": true,
+      "issues": [],
+      "items": 2,
+      "edges": 8,
+      "presses": 9
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "album",
+      "ok": true,
+      "issues": [],
+      "items": 18,
+      "edges": 72,
+      "presses": 106
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "viewer",
+      "ok": true,
+      "issues": [],
+      "items": 3,
+      "edges": 12,
+      "presses": 15
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "slideshow",
+      "ok": true,
+      "issues": [],
+      "items": 5,
+      "edges": 20,
+      "presses": 31
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "search",
+      "ok": true,
+      "issues": [],
+      "items": 40,
+      "edges": 160,
+      "presses": 184
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "album search",
+      "ok": true,
+      "issues": [],
+      "items": 40,
+      "edges": 160,
+      "presses": 184
+    },
+    {
+      "language": "en",
+      "kind": "walk",
+      "name": "settings",
+      "ok": true,
+      "issues": [],
+      "items": 7,
+      "edges": 28,
+      "presses": 41
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Home opens on the first album; header and rails are reachable",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Back on Home asks before leaving; Cancel and Back both stay",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "An album link opens the album; grid and header remember focus; Back works",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Viewer: the filmstrip follows focus and Back lands on the photo last viewed",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Slideshow: controls in order; Back pauses, then leaves",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Search: the keyboard keeps a–z left to right in both languages",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Home search finds albums; OK opens one; Back returns to it (ar)",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Album search finds that album's photos; Back returns to them (ar)",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "Settings opens on the current speed; options and Back reachable",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "check",
+      "name": "A photo link opens the viewer on that photo; Back goes Home",
+      "ok": true,
+      "failures": []
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "home",
+      "ok": true,
+      "issues": [],
+      "items": 7,
+      "edges": 25,
+      "presses": 44
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "exit dialog",
+      "ok": true,
+      "issues": [],
+      "items": 2,
+      "edges": 8,
+      "presses": 8
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "album",
+      "ok": true,
+      "issues": [],
+      "items": 18,
+      "edges": 72,
+      "presses": 99
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "viewer",
+      "ok": true,
+      "issues": [],
+      "items": 3,
+      "edges": 12,
+      "presses": 16
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "slideshow",
+      "ok": true,
+      "issues": [],
+      "items": 5,
+      "edges": 20,
+      "presses": 30
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "search",
+      "ok": true,
+      "issues": [],
+      "items": 40,
+      "edges": 160,
+      "presses": 184
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "album search",
+      "ok": true,
+      "issues": [],
+      "items": 40,
+      "edges": 160,
+      "presses": 184
+    },
+    {
+      "language": "ar",
+      "kind": "walk",
+      "name": "settings",
+      "ok": true,
+      "issues": [],
+      "items": 7,
+      "edges": 28,
+      "presses": 38
+    }
+  ],
+  "missingFixtures": 0
+}

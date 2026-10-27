@@ -73,3 +73,12 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# env
+.env
+
+# web
+web-build/
+
+# webOS packages (scripts/tv/lg.sh)
+/build/

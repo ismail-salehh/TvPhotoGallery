@@ -1,0 +1,896 @@
+{
+  "about": "Written key-sequence checks and focus-walk screens, run by scripts/qa on every target. Keys: up, down, start, end, select, back. start/end are left/right in English and right/left in Arabic. Expectations are focus ids (testID); * matches anything; $name is an id captured earlier in the same check. A check with \"languages\" runs only in those.",
+  "links": {
+    "album": "album/dNdfcri79XQ",
+    "photo": "photo/SgtU7sK6oP4"
+  },
+  "checks": [
+    {
+      "name": "Home opens on the first album; header and rails are reachable",
+      "start": "home",
+      "steps": [
+        {
+          "expect": "album-card-*",
+          "capture": "firstAlbum"
+        },
+        {
+          "key": "end",
+          "expect": "album-card-*",
+          "notExpect": "$firstAlbum"
+        },
+        {
+          "key": "start",
+          "expect": "$firstAlbum"
+        },
+        {
+          "key": "start",
+          "expect": "$firstAlbum",
+          "why": "the rail's first card is its edge"
+        },
+        {
+          "key": "up",
+          "expect": "home-search-bar"
+        },
+        {
+          "key": "end",
+          "expect": "home-settings"
+        },
+        {
+          "key": "end",
+          "expect": "home-settings",
+          "why": "nothing beyond Settings"
+        },
+        {
+          "key": "start",
+          "expect": "home-search-bar"
+        },
+        {
+          "key": "down",
+          "expect": "$firstAlbum",
+          "why": "the rail is entered on the card last focused"
+        },
+        {
+          "key": "down",
+          "expect": "album-card-*",
+          "notExpect": "$firstAlbum",
+          "capture": "secondRail",
+          "why": "the next rail, on its first card"
+        },
+        {
+          "key": "end",
+          "expect": "album-card-*",
+          "notExpect": "$secondRail",
+          "capture": "secondRailNext"
+        },
+        {
+          "key": "up",
+          "expect": "$firstAlbum",
+          "why": "each rail is entered on its card last focused"
+        },
+        {
+          "key": "down",
+          "expect": "$secondRailNext"
+        }
+      ]
+    },
+    {
+      "name": "Back on Home asks before leaving; Cancel and Back both stay",
+      "start": "home",
+      "steps": [
+        {
+          "expect": "album-card-*",
+          "capture": "card"
+        },
+        {
+          "key": "back",
+          "expect": "exit-cancel",
+          "wait": 800
+        },
+        {
+          "key": "end",
+          "expect": "exit-confirm"
+        },
+        {
+          "key": "end",
+          "expect": "exit-confirm",
+          "why": "focus stays inside the dialog"
+        },
+        {
+          "key": "up",
+          "expect": "exit-confirm"
+        },
+        {
+          "key": "start",
+          "expect": "exit-cancel"
+        },
+        {
+          "key": "select",
+          "expect": "$card",
+          "wait": 800,
+          "why": "Cancel returns focus to where it was"
+        },
+        {
+          "key": "back",
+          "expect": "exit-cancel",
+          "wait": 800
+        },
+        {
+          "key": "back",
+          "expect": "$card",
+          "wait": 800
+        }
+      ]
+    },
+    {
+      "name": "An album link opens the album; grid and header remember focus; Back works",
+      "start": "link:album",
+      "steps": [
+        {
+          "expect": "photo-card-*",
+          "capture": "first",
+          "wait": 3000
+        },
+        {
+          "key": "end",
+          "expect": "photo-card-*",
+          "notExpect": "$first",
+          "capture": "second"
+        },
+        {
+          "key": "down",
+          "expect": "photo-card-*",
+          "notExpect": "$second"
+        },
+        {
+          "key": "up",
+          "expect": "$second"
+        },
+        {
+          "key": "start",
+          "expect": "$first"
+        },
+        {
+          "key": "up",
+          "expect": "album-back"
+        },
+        {
+          "key": "end",
+          "expect": "album-search"
+        },
+        {
+          "key": "end",
+          "expect": "album-slideshow"
+        },
+        {
+          "key": "down",
+          "expect": "$first",
+          "why": "the grid is entered on the photo last focused, not the nearest"
+        },
+        {
+          "key": "up",
+          "expect": "album-slideshow",
+          "why": "the header is entered on the button last focused"
+        },
+        {
+          "key": "down",
+          "expect": "$first"
+        },
+        {
+          "key": "back",
+          "expect": "album-card-*",
+          "wait": 1500,
+          "why": "a link opened at launch goes back to Home"
+        }
+      ]
+    },
+    {
+      "name": "Viewer: the filmstrip follows focus and Back lands on the photo last viewed",
+      "start": "link:album",
+      "steps": [
+        {
+          "expect": "photo-card-*",
+          "wait": 3000
+        },
+        {
+          "key": "select",
+          "expect": "filmstrip-*",
+          "capture": "opened",
+          "wait": 2000
+        },
+        {
+          "key": "end",
+          "expect": "filmstrip-*",
+          "notExpect": "$opened",
+          "capture": "next"
+        },
+        {
+          "key": "end",
+          "expect": "filmstrip-*",
+          "notExpect": "$next",
+          "capture": "third"
+        },
+        {
+          "key": "start",
+          "expect": "$next"
+        },
+        {
+          "key": "up",
+          "expect": "photo-*",
+          "why": "a header button"
+        },
+        {
+          "key": "down",
+          "expect": "$next",
+          "why": "back on the current photo, not the box under the button"
+        },
+        {
+          "key": "back",
+          "expect": "photo-card-*",
+          "wait": 1500
+        }
+      ]
+    },
+    {
+      "name": "Slideshow: controls in order; Back pauses, then leaves",
+      "start": "link:photo",
+      "steps": [
+        {
+          "expect": "filmstrip-*",
+          "wait": 3000
+        },
+        {
+          "key": "up",
+          "expect": "photo-*"
+        },
+        {
+          "key": "end",
+          "expect": "photo-slideshow"
+        },
+        {
+          "key": "select",
+          "expect": "slideshow-play",
+          "wait": 2000
+        },
+        {
+          "key": "start",
+          "expect": "slideshow-previous"
+        },
+        {
+          "key": "end",
+          "expect": "slideshow-play"
+        },
+        {
+          "key": "end",
+          "expect": "slideshow-next"
+        },
+        {
+          "key": "end",
+          "expect": "slideshow-interval"
+        },
+        {
+          "key": "select",
+          "expect": "slideshow-speed-*",
+          "wait": 800
+        },
+        {
+          "key": "back",
+          "expect": "slideshow-interval",
+          "wait": 800
+        },
+        {
+          "key": "back",
+          "expect": "slideshow-interval",
+          "wait": 800,
+          "why": "the first Back stops the slideshow"
+        },
+        {
+          "key": "back",
+          "expect": "photo-slideshow",
+          "wait": 1500,
+          "why": "focus returns to the button that opened it"
+        }
+      ]
+    },
+    {
+      "name": "Search: the keyboard keeps a–z left to right in both languages",
+      "start": "home",
+      "steps": [
+        {
+          "expect": "album-card-*"
+        },
+        {
+          "key": "up",
+          "expect": "home-search-bar"
+        },
+        {
+          "key": "select",
+          "expect": "key-a",
+          "wait": 1200
+        },
+        {
+          "key": "right",
+          "expect": "key-b",
+          "why": "physical right, in either language"
+        },
+        {
+          "key": "down",
+          "expect": "key-h"
+        },
+        {
+          "key": "left",
+          "expect": "key-g"
+        },
+        {
+          "key": "down",
+          "expect": "key-m"
+        },
+        {
+          "key": "down",
+          "expect": "key-s"
+        },
+        {
+          "key": "down",
+          "expect": "key-y"
+        },
+        {
+          "key": "down",
+          "expect": "key-5"
+        },
+        {
+          "key": "down",
+          "expect": "key-space"
+        },
+        {
+          "key": "back",
+          "expect": "home-search-bar",
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "Home search finds albums; OK opens one; Back returns to it (en)",
+      "languages": ["en"],
+      "start": "home",
+      "steps": [
+        {
+          "expect": "album-card-*"
+        },
+        {
+          "key": "up",
+          "expect": "home-search-bar"
+        },
+        {
+          "key": "select",
+          "expect": "key-a",
+          "wait": 1200
+        },
+        {
+          "key": "down",
+          "expect": "key-g"
+        },
+        {
+          "key": "down",
+          "expect": "key-m"
+        },
+        {
+          "key": "right",
+          "expect": "key-n"
+        },
+        {
+          "key": "right",
+          "expect": "key-o"
+        },
+        {
+          "key": "right",
+          "expect": "key-p"
+        },
+        {
+          "key": "right",
+          "expect": "key-q"
+        },
+        {
+          "key": "right",
+          "expect": "key-r"
+        },
+        {
+          "key": "select",
+          "expect": "key-r"
+        },
+        {
+          "key": "up",
+          "expect": "key-l"
+        },
+        {
+          "key": "up",
+          "expect": "key-f"
+        },
+        {
+          "key": "left",
+          "expect": "key-e"
+        },
+        {
+          "key": "select",
+          "expect": "key-e"
+        },
+        {
+          "key": "left",
+          "expect": "key-d"
+        },
+        {
+          "key": "select",
+          "expect": "key-d",
+          "wait": 2500,
+          "why": "typed “red”; results arrive under the keyboard's focus"
+        },
+        {
+          "key": "right",
+          "expect": "key-e"
+        },
+        {
+          "key": "right",
+          "expect": "key-f"
+        },
+        {
+          "key": "right",
+          "expect": "album-card-*",
+          "capture": "found",
+          "why": "results are right of the keyboard"
+        },
+        {
+          "key": "select",
+          "expect": "photo-card-*",
+          "wait": 3000
+        },
+        {
+          "key": "back",
+          "expect": "$found",
+          "wait": 1500
+        },
+        {
+          "key": "back",
+          "expect": "home-search-bar",
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "Album search finds that album's photos; Back returns to them (en)",
+      "languages": ["en"],
+      "start": "link:album",
+      "steps": [
+        {
+          "expect": "photo-card-*",
+          "wait": 3000
+        },
+        {
+          "key": "up",
+          "expect": "album-back"
+        },
+        {
+          "key": "end",
+          "expect": "album-search"
+        },
+        {
+          "key": "select",
+          "expect": "key-a",
+          "wait": 1200
+        },
+        {
+          "key": "down",
+          "expect": "key-g"
+        },
+        {
+          "key": "down",
+          "expect": "key-m"
+        },
+        {
+          "key": "right",
+          "expect": "key-n"
+        },
+        {
+          "key": "right",
+          "expect": "key-o"
+        },
+        {
+          "key": "right",
+          "expect": "key-p"
+        },
+        {
+          "key": "right",
+          "expect": "key-q"
+        },
+        {
+          "key": "right",
+          "expect": "key-r"
+        },
+        {
+          "key": "select",
+          "expect": "key-r"
+        },
+        {
+          "key": "up",
+          "expect": "key-l"
+        },
+        {
+          "key": "up",
+          "expect": "key-f"
+        },
+        {
+          "key": "left",
+          "expect": "key-e"
+        },
+        {
+          "key": "select",
+          "expect": "key-e"
+        },
+        {
+          "key": "left",
+          "expect": "key-d"
+        },
+        {
+          "key": "select",
+          "expect": "key-d",
+          "wait": 2500,
+          "why": "typed “red”; results arrive under the keyboard's focus"
+        },
+        {
+          "key": "right",
+          "expect": "key-e"
+        },
+        {
+          "key": "right",
+          "expect": "key-f"
+        },
+        {
+          "key": "right",
+          "expect": "photo-card-*",
+          "capture": "found",
+          "why": "results are right of the keyboard"
+        },
+        {
+          "key": "select",
+          "expect": "filmstrip-*",
+          "wait": 2000
+        },
+        {
+          "key": "back",
+          "expect": "$found",
+          "wait": 1500
+        },
+        {
+          "key": "back",
+          "expect": "album-search",
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "Home search finds albums; OK opens one; Back returns to it (ar)",
+      "languages": ["ar"],
+      "start": "home",
+      "steps": [
+        {
+          "expect": "album-card-*"
+        },
+        {
+          "key": "up",
+          "expect": "home-search-bar"
+        },
+        {
+          "key": "select",
+          "expect": "key-a",
+          "wait": 1200
+        },
+        {
+          "key": "down",
+          "expect": "key-g"
+        },
+        {
+          "key": "down",
+          "expect": "key-m"
+        },
+        {
+          "key": "right",
+          "expect": "key-n"
+        },
+        {
+          "key": "right",
+          "expect": "key-o"
+        },
+        {
+          "key": "right",
+          "expect": "key-p"
+        },
+        {
+          "key": "right",
+          "expect": "key-q"
+        },
+        {
+          "key": "right",
+          "expect": "key-r"
+        },
+        {
+          "key": "select",
+          "expect": "key-r"
+        },
+        {
+          "key": "up",
+          "expect": "key-l"
+        },
+        {
+          "key": "up",
+          "expect": "key-f"
+        },
+        {
+          "key": "left",
+          "expect": "key-e"
+        },
+        {
+          "key": "select",
+          "expect": "key-e"
+        },
+        {
+          "key": "left",
+          "expect": "key-d"
+        },
+        {
+          "key": "select",
+          "expect": "key-d",
+          "wait": 2500,
+          "why": "typed “red”; results arrive under the keyboard's focus"
+        },
+        {
+          "key": "left",
+          "expect": "key-c"
+        },
+        {
+          "key": "left",
+          "expect": "key-b"
+        },
+        {
+          "key": "left",
+          "expect": "key-a"
+        },
+        {
+          "key": "left",
+          "expect": "album-card-*",
+          "capture": "found",
+          "why": "results are left of the keyboard"
+        },
+        {
+          "key": "select",
+          "expect": "photo-card-*",
+          "wait": 3000
+        },
+        {
+          "key": "back",
+          "expect": "$found",
+          "wait": 1500
+        },
+        {
+          "key": "back",
+          "expect": "home-search-bar",
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "Album search finds that album's photos; Back returns to them (ar)",
+      "languages": ["ar"],
+      "start": "link:album",
+      "steps": [
+        {
+          "expect": "photo-card-*",
+          "wait": 3000
+        },
+        {
+          "key": "up",
+          "expect": "album-back"
+        },
+        {
+          "key": "end",
+          "expect": "album-search"
+        },
+        {
+          "key": "select",
+          "expect": "key-a",
+          "wait": 1200
+        },
+        {
+          "key": "down",
+          "expect": "key-g"
+        },
+        {
+          "key": "down",
+          "expect": "key-m"
+        },
+        {
+          "key": "right",
+          "expect": "key-n"
+        },
+        {
+          "key": "right",
+          "expect": "key-o"
+        },
+        {
+          "key": "right",
+          "expect": "key-p"
+        },
+        {
+          "key": "right",
+          "expect": "key-q"
+        },
+        {
+          "key": "right",
+          "expect": "key-r"
+        },
+        {
+          "key": "select",
+          "expect": "key-r"
+        },
+        {
+          "key": "up",
+          "expect": "key-l"
+        },
+        {
+          "key": "up",
+          "expect": "key-f"
+        },
+        {
+          "key": "left",
+          "expect": "key-e"
+        },
+        {
+          "key": "select",
+          "expect": "key-e"
+        },
+        {
+          "key": "left",
+          "expect": "key-d"
+        },
+        {
+          "key": "select",
+          "expect": "key-d",
+          "wait": 2500,
+          "why": "typed “red”; results arrive under the keyboard's focus"
+        },
+        {
+          "key": "left",
+          "expect": "key-c"
+        },
+        {
+          "key": "left",
+          "expect": "key-b"
+        },
+        {
+          "key": "left",
+          "expect": "key-a"
+        },
+        {
+          "key": "left",
+          "expect": "photo-card-*",
+          "capture": "found",
+          "why": "results are left of the keyboard"
+        },
+        {
+          "key": "select",
+          "expect": "filmstrip-*",
+          "wait": 2000
+        },
+        {
+          "key": "back",
+          "expect": "$found",
+          "wait": 1500
+        },
+        {
+          "key": "back",
+          "expect": "album-search",
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "Settings opens on the current speed; options and Back reachable",
+      "start": "home",
+      "steps": [
+        {
+          "expect": "album-card-*"
+        },
+        {
+          "key": "up",
+          "expect": "home-search-bar"
+        },
+        {
+          "key": "end",
+          "expect": "home-settings"
+        },
+        {
+          "key": "select",
+          "expect": "settings-speed-*",
+          "wait": 1200
+        },
+        {
+          "key": "down",
+          "expect": "settings-language-*"
+        },
+        {
+          "key": "up",
+          "expect": "settings-speed-*"
+        },
+        {
+          "key": "up",
+          "expect": "settings-back"
+        },
+        {
+          "key": "back",
+          "expect": "home-settings",
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "A photo link opens the viewer on that photo; Back goes Home",
+      "start": "link:photo",
+      "steps": [
+        {
+          "expect": "filmstrip-SgtU7sK6oP4",
+          "wait": 3000
+        },
+        {
+          "key": "end",
+          "expect": "filmstrip-SgtU7sK6oP4",
+          "why": "a single photo: nothing beside it"
+        },
+        {
+          "key": "back",
+          "expect": "album-card-*",
+          "wait": 1500
+        }
+      ]
+    }
+  ],
+  "walks": [
+    {
+      "name": "home",
+      "start": "home",
+      "settle": 2500
+    },
+    {
+      "name": "exit dialog",
+      "start": "home",
+      "setup": ["back"]
+    },
+    {
+      "name": "album",
+      "start": "link:album",
+      "settle": 3000
+    },
+    {
+      "name": "viewer",
+      "start": "link:photo",
+      "settle": 3000
+    },
+    {
+      "name": "slideshow",
+      "start": "link:photo",
+      "setup": ["up", "end", "select"],
+      "settle": 2000
+    },
+    {
+      "name": "search",
+      "start": "home",
+      "setup": ["up", "select"]
+    },
+    {
+      "name": "album search",
+      "start": "link:album",
+      "setup": ["up", "end", "select"],
+      "settle": 2000
+    },
+    {
+      "name": "settings",
+      "start": "home",
+      "setup": ["up", "end", "select"]
+    }
+  ]
+}

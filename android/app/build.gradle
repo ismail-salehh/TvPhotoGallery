@@ -83,7 +83,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        // The app version lives in package.json, shared with iOS and web
+        versionName new groovy.json.JsonSlurper().parse(file("../../package.json")).version
     }
     signingConfigs {
         debug {

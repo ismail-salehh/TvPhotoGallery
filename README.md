@@ -1,5 +1,32 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+# Project structure
+
+```
+src/App.tsx              App root: providers + router
+index.js / index.web.js  Native and web entry points
+src/
+  api/                   Unsplash client, album/photo requests, response types
+  i18n/                  Translations (en, ar) and the translate function
+  platform/              Native vs web differences (*.web.ts): back button, D-pad navigation
+  ui-kit/focus/          TV focus system: screens, focusables, groups, focus memory
+  types/                 Ambient type declarations (@env)
+  app/
+    navigation/Router    Screen stack, Back handling, exit confirmation
+    screens/             One file per screen: Home, Album, PhotoViewer, Slideshow, Search, Settings
+    components/
+      common/            Buttons, dialog, status/empty/error views, app brand, card grid
+      album/             Album card, rail, rails, grid; featured hero
+      photo/             Photo card, photo grid, viewer filmstrip
+      search/            Search bar, on-screen keyboard
+      slideshow/         Slideshow controls
+    context/             App-wide providers: back button, settings
+    hooks/               Data loading (albums, photos, search), i18n, key presses
+    theme.ts             Colors, spacing, radii
+web/                     HTML shell for the web build
+assets/brand/            Icon and banner sources (scripts/generate-icons.sh)
+```
+
 # Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
@@ -66,7 +93,7 @@ This is one way to run your app — you can also build it directly from Android 
 
 Now that you have successfully run the app, let's make changes!
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+Open `src/App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
 
 When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
 

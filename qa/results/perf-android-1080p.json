@@ -1,0 +1,53 @@
+{
+  "target": "android",
+  "device": "AOSP TV on x86, Android 16",
+  "screen": "Physical size: 1920x1080, Physical density: 320",
+  "build": "release",
+  "at": "2026-10-27T12:09:14.491Z",
+  "startup": [
+    {
+      "firstFrameMs": 179,
+      "firstFocusMs": 653,
+      "on": "album-card-1xCCWOBi2EY"
+    },
+    {
+      "firstFrameMs": 179,
+      "firstFocusMs": 613,
+      "on": "album-card-1xCCWOBi2EY"
+    },
+    {
+      "firstFrameMs": 167,
+      "firstFocusMs": 613,
+      "on": "album-card-1xCCWOBi2EY"
+    },
+    {
+      "firstFrameMs": 181,
+      "firstFocusMs": 630,
+      "on": "album-card-1xCCWOBi2EY"
+    },
+    {
+      "firstFrameMs": 226,
+      "firstFocusMs": 660,
+      "on": "album-card-1xCCWOBi2EY"
+    }
+  ],
+  "memoryHome": 110,
+  "holdRight": {
+    "presses": 9,
+    "frames": 39,
+    "janky": "23.08%",
+    "p50": 16,
+    "p95": 32,
+    "p99": 32
+  },
+  "memoryAlbumOpen": 134,
+  "holdDown": {
+    "presses": 40,
+    "frames": 162,
+    "janky": "4.94%",
+    "p50": 20,
+    "p95": 31,
+    "p99": 36
+  },
+  "memoryAfterHold": 152
+}

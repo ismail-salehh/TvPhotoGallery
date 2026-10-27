@@ -1,0 +1,23 @@
+<!-- The app's mark on its own: a photo with mountains and a sun, stacked on
+     a second photo. The cut-outs are transparent, so it works on any
+     background. app-icon.svg puts it on the brand background. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <!-- The front photo, with the sun and the mountain line cut out -->
+    <mask id="front-cutouts" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="#fff"/>
+      <circle cx="12.6" cy="6.4" r="1.9" fill="#000"/>
+      <polyline points="1,15 6.5,9.3 10,12.8 12.6,10.3 18,15.8" fill="none" stroke="#000"
+                stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+    </mask>
+    <!-- The photo behind shows only past a gap around the front one -->
+    <mask id="back-gap" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="#fff"/>
+      <rect x="0.4" y="0.4" width="18.2" height="18.2" rx="4.6" fill="#000"/>
+    </mask>
+  </defs>
+  <g fill="#fff">
+    <rect x="6.5" y="6.5" width="15" height="15" rx="3.2" mask="url(#back-gap)"/>
+    <rect x="2" y="2" width="15" height="15" rx="3.2" mask="url(#front-cutouts)"/>
+  </g>
+</svg>

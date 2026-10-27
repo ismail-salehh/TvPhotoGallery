@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Photo Gallery</title>
+    <style>
+      html, body, #root { height: 100%; margin: 0; }
+      body { overflow: hidden; background: #000; }
+      #root { display: flex; }
+      /* Every focusable draws its own TV-style focus state (border, scale);
+         the browser's focus ring on top of it would double it up */
+      [tabindex]:focus { outline: none; }
+      /* react-native-web aligns each text by its own script (dir="auto"); in
+         an RTL layout, text lines up at the right whatever its script, as on
+         Android TV. An explicit textAlign (r-textAlign-*) still wins. */
+      html[dir="rtl"] [dir="auto"]:not([class*="r-textAlign"]) {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
