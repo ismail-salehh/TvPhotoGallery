@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { BackHandler, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { Album, Photo } from '../../api/types';
+import { exitApp } from '../../platform/backPress';
 import { addLinkListener, getInitialLink } from '../../platform/deepLink';
 import { FocusScreen } from '../../ui-kit/focus/FocusScreen';
 import { useFocusStore } from '../../ui-kit/focus/focusStore';
@@ -181,7 +182,7 @@ export function Router() {
                   <TextButton
                     id="exit-confirm"
                     label={t('exit.confirm')}
-                    onPress={() => BackHandler.exitApp()}
+                    onPress={exitApp}
                     style={styles.dialogButton}
                   />
                 </Dialog>

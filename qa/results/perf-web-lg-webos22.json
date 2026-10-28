@@ -1,0 +1,95 @@
+{
+  "target": "web",
+  "browser": "Mozilla/5.0 (Web0S; Linux/SmartTV) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 WebAppManager",
+  "size": "1920x1080",
+  "cpuSlowdown": 1,
+  "at": "2026-10-28T07:10:52.837Z",
+  "startup": [
+    {
+      "firstPaint": 1072,
+      "firstAlbumFocused": 1439
+    },
+    {
+      "firstPaint": 617,
+      "firstAlbumFocused": 587
+    },
+    {
+      "firstPaint": 552,
+      "firstAlbumFocused": 521
+    },
+    {
+      "firstPaint": 903,
+      "firstAlbumFocused": 871
+    },
+    {
+      "firstPaint": 524,
+      "firstAlbumFocused": 481
+    }
+  ],
+  "memoryHome": {
+    "jsHeapMB": 10,
+    "domNodes": 1031
+  },
+  "keyToFocusRail": {
+    "n": 9,
+    "p50": 4,
+    "p95": 15,
+    "p99": 15,
+    "movedOf": "9/9"
+  },
+  "holdRight": {
+    "presses": 9,
+    "moves": 9,
+    "frames": {
+      "n": 49,
+      "p50": 17,
+      "p95": 133,
+      "p99": 267
+    },
+    "missedFrames": "27%",
+    "over33ms": "10%",
+    "keys": 9
+  },
+  "memoryAlbumOpen": {
+    "jsHeapMB": 12.5,
+    "domNodes": 1388
+  },
+  "keyToFocusGrid": {
+    "n": 20,
+    "p50": 7,
+    "p95": 15,
+    "p99": 15,
+    "movedOf": "20/20"
+  },
+  "holdDown": {
+    "presses": 60,
+    "moves": 60,
+    "frames": {
+      "n": 76,
+      "p50": 117,
+      "p95": 300,
+      "p99": 350
+    },
+    "missedFrames": "96%",
+    "over33ms": "89%",
+    "keys": 60
+  },
+  "bigAlbum": {
+    "lastFocused": "photo-card-big1995",
+    "reachedEnd": true,
+    "seconds": 74,
+    "presses": 400,
+    "frames": {
+      "n": 1208,
+      "p50": 50,
+      "p95": 150,
+      "p99": 233
+    },
+    "missedFrames": "64%"
+  },
+  "memoryAfter180Rows": {
+    "jsHeapMB": 15.2,
+    "domNodes": 3474
+  },
+  "missingFixtures": 0
+}

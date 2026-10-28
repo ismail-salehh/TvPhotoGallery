@@ -27,6 +27,8 @@ export type DomElement = {
 
 export type DomKeyboardEvent = {
   key: string;
+  // Legacy code; TV remotes' own keys are often only identified by it
+  keyCode?: number;
   // True for the automatic repeats while a key is held down
   repeat: boolean;
   target: unknown;
@@ -55,6 +57,7 @@ type DomDocument = {
 };
 
 type DomWindow = {
+  close: () => void;
   location: { hash: string; href: string; pathname: string; search: string };
   history: { replaceState: (state: null, title: string, url: string) => void };
   addEventListener: <E>(

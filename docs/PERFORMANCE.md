@@ -16,23 +16,23 @@ Every number in the budget must hold **on the weakest supported device, in a rel
 
 ## The matrix
 
-One column per supported platform (`docs/SUPPORT.md`). ✓ within budget · ✗ over budget · — not measured (reason below the table). Measured 2026-10-27. Startup: Android is the median of 5 cold launches; web is the first load, with an empty HTTP cache.
+One column per supported platform (`docs/SUPPORT.md`). ✓ within budget · ✗ over budget · — not measured (reason below the table). Measured 2026-10-27; LG webOS 22 on 2026-10-28. Startup: Android is the median of 5 cold launches; web is the first load, with an empty HTTP cache (on the TV: cache and app storage cleared).
 
 | Measure | Android TV 1080p | Android TV 720p | Android TV 4K | Android 7 (oldest) | Web, Chrome 1080p | Web, Chrome 720p | Web, Chrome 4K | Web, CPU 4× slower | LG webOS 22 | Firefox / Safari | Apple TV |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| First frame (cold) | ✓ 0.18 s | ✓ 0.19 s | — | — | ✓ 0.14 s | ✓ 0.16 s | ✓ 0.18 s | ✓ 0.42 s | — | — | — |
-| First album focused (cold) | ✓ 0.63 s | ✓ 0.62 s | — | — | ✓ 0.21 s | ✓ 0.22 s | ✓ 0.23 s | ✓ 0.59 s | — | — | — |
-| Key to focus, p95 | — | — | — | — | ✓ 16 ms | ✓ 16 ms | ✓ 16 ms | ✓ 16 ms | — | — | — |
-| Holding Right on a rail | ✓ p95 32 / p99 32 | ✓ 16 / 16 | — | — | ✓ 17 / 17 | ✓ 17 / 17 | ✓ 17 / 17 | ✓ 17 / 33 | — | — | — |
-| Holding Down in an album | ✓ p95 31 / p99 36 | ✓ 32 / 32 | — | — | ✓ 17 / 17 | ✓ 17 / 17 | ✓ 17 / 17 | **✗ 67 / 83** | — | — | — |
-| 2,000-photo album | — | — | — | — | ✓ all reached, 24 s | ✓ 23 s | ✓ 24 s, p99 33 | ✓ 31 s, p99 33 | — | — | — |
-| Memory while browsing | ✓ 152 MB | ✓ 148 MB | — | — | JS heap 62 MB | JS heap 66 MB | JS heap 68 MB | JS heap 68 MB | — | — | — |
+| First frame (cold) | ✓ 0.18 s | ✓ 0.19 s | — | — | ✓ 0.14 s | ✓ 0.16 s | ✓ 0.18 s | ✓ 0.42 s | ✗ 1.07 s | — | — |
+| First album focused (cold) | ✓ 0.63 s | ✓ 0.62 s | — | — | ✓ 0.21 s | ✓ 0.22 s | ✓ 0.23 s | ✓ 0.59 s | ✓ 1.44 s | — | — |
+| Key to focus, p95 | — | — | — | — | ✓ 16 ms | ✓ 16 ms | ✓ 16 ms | ✓ 16 ms | ✓ 15 ms | — | — |
+| Holding Right on a rail | ✓ p95 32 / p99 32 | ✓ 16 / 16 | — | — | ✓ 17 / 17 | ✓ 17 / 17 | ✓ 17 / 17 | ✓ 17 / 33 | **✗ 133 / 267** | — | — |
+| Holding Down in an album | ✓ p95 31 / p99 36 | ✓ 32 / 32 | — | — | ✓ 17 / 17 | ✓ 17 / 17 | ✓ 17 / 17 | **✗ 67 / 83** | **✗ 300 / 350** | — | — |
+| 2,000-photo album | — | — | — | — | ✓ all reached, 24 s | ✓ 23 s | ✓ 24 s, p99 33 | ✓ 31 s, p99 33 | ✗ all reached, 74 s, p99 233 | — | — |
+| Memory while browsing | ✓ 152 MB | ✓ 148 MB | — | — | JS heap 62 MB | JS heap 66 MB | JS heap 68 MB | JS heap 68 MB | JS heap 15 MB | — | — |
 | Two-hour slideshow | ? see Open | — | — | — | — | — | — | — | — | — | — |
 
 **Not measured, and what it needs:**
 - **Android TV 4K:** the `Television_4K` emulator crashes on start on this machine (segfault, with host and software GPU), and this emulator image ignores screen-size overrides above its physical 1080p. Needs a 4K TV, or a host that can run the 4K emulator.
 - **Android 7 (API 24), the oldest supported:** no TV system image for API 24 is installed (only API 21, below `minSdkVersion`, and API 36).
-- **LG webOS 22 (Chromium 87):** no TV attached. On 2026-10-27 the official Chromium 87.0.4272.0 snapshot (revision 809590) ran the production build: the app starts, focuses the first album and shows its rails, with no exception or console error (a planted error was caught, so the capture works). The bundle also uses no syntax or built-in newer than Chrome 87 (static check, dependencies included). The budget measurements on it were not run: the session's permission policy blocked starting that browser again. To run them: `node scripts/perf/web.mjs --url <production build> --chrome <chromium-87>/chrome` (and `--cpu 4`).
+- **LG webOS 22, whole-app memory and the two-hour slideshow:** DevTools gives the JS heap only, not the memory the TV's web app manager holds (decoded images included); the slideshow soak (`--soak 120`) was not run on the TV.
 - **Firefox and Safari:** no browser automation for them here; Chrome is the engine of every TV target.
 - **Apple TV:** the Xcode project has no tvOS target yet.
 - **Key to focus on Android:** needs a high-speed camera or a Perfetto input-to-frame trace.
@@ -71,10 +71,26 @@ Headless, software rendering (`--disable-gpu`), API answers replayed from `qa/fi
 
 A frame over 25 ms missed a 60 Hz vsync. The JS heap leaves out decoded images, so it can't be compared with Android's PSS. Key to focus ends at the start of the frame that draws the move, not at the pixels on the TV.
 
+### LG webOS 22 TV (production build)
+
+LG 50UQ75006LG, webOS 22 (SDK 7.6.0, firmware 04.60.91), engine Chrome/87.0.4280.88; 1920×1080 CSS pixels at device pixel ratio 2. The `.ipk` from `scripts/tv/lg.sh install`, measured by `scripts/perf/web.mjs --devtools` through `ares-inspect`: key presses come over DevTools, not the remote, and DevTools stays attached during the run. API answers replayed from the fixtures (photos load from Unsplash over the TV's network). Raw results: `qa/results/perf-web-lg-webos22.json`.
+
+| Measure | Result |
+|---|---|
+| First paint, cold / warm | 1,072 / 524–903 ms |
+| First album focused, cold / warm | 1,439 / 481–871 ms |
+| Key to focus, p50 / p95 | rail 4 / 15, grid 7 / 15 ms; every press moved focus |
+| Holding Right on a rail (9 presses), frame p50 / p95 / p99 | 17 / 133 / 267 ms; 27% missed; 9 of 9 moved |
+| Holding Down in an album (60 presses) | **117 / 300 / 350 ms; 96% missed**; 60 of 60 moved |
+| 2,000-photo album, Down held to the end | all reached, 400 presses, 74 s; p50 50, p95 150, p99 233; 64% missed |
+| JS heap: Home / album open / after 180 rows | 10 / 12.5 / 15.2 MB |
+| DOM nodes after 180 rows | 3,474 |
+
 ### Findings
 
-1. **Album grid on a slow CPU.** With the CPU 4× slower, holding Down in an album gives p95 67 ms and p99 83 ms (budget 33 / 50), and a quarter of the frames miss a vsync. Focus still moves once per press. The Home rail and the 2,000-photo traversal stay within budget under the same throttle. This is the first thing to check on a webOS 22 TV and on the weakest Android stick.
-2. **DOM size after a long scroll.** 12–14 thousand DOM nodes after 180 rows on every web configuration: the grid's 7-screen render window still leaves a large page for a TV browser.
+1. **Held arrows on the LG webOS 22 TV.** Holding Down in an album runs at p50 117, p95 300, p99 350 ms per frame (budget 33 / 50): almost every frame misses a vsync. A Home rail is over too (p95 133, p99 267). Focus still moves once per press and a single press shows in 15 ms (p95), so it reads as a stuttering scroll, not lost presses. The CPU 4× stand-in (grid p95 67, rail within budget) understated it. Cause not profiled yet.
+2. **Cold start on the TV.** First paint 1.07 s against a 1.0 s budget; the first album is focused at 1.44 s (budget 3.0 s).
+3. **DOM size after a long scroll.** 12–14 thousand DOM nodes after 180 rows in desktop Chrome: the grid's 7-screen render window still leaves a large page for a TV browser. The TV had 3,474 at the same point.
 
 ## Earlier measurements (2026-10-26, Android release build, emulator at 320 dpi)
 
@@ -98,9 +114,10 @@ A frame over 25 ms missed a 60 Hz vsync. The JS heap leaves out decoded images, 
 ## Open
 
 1. **Slideshow memory.** The 2026-10-26 soak was interrupted (app left the foreground at minute 35, emulator rebooted at minute ~82). Re-run it uninterrupted, sampling every 47 s and checking two screenshots 4 s apart for movement; if the climb repeats, find what holds native memory. `scripts/perf/web.mjs --soak 120` runs the web equivalent.
-2. **The album grid under a slow CPU** (finding 1), on real TV hardware.
-3. **Key-to-focus latency on Android**, and everything above on the real weakest device, in a release build.
-4. **The columns marked —**, with what each needs (above).
+2. **Held arrows on the LG TV** (finding 1): profile the grid and a rail while an arrow is held (`scripts/tv/lg.sh inspect`, Performance panel), fix, re-measure.
+3. **Cold first paint on the LG TV** (finding 2), 70 ms over budget.
+4. **Key-to-focus latency on Android**, and everything above on the real weakest device, in a release build.
+5. **The columns marked —**, with what each needs (above).
 
 ## How to measure
 
@@ -117,6 +134,13 @@ npx webpack --mode production --output-path /tmp/web-prod && (cd /tmp/web-prod &
 node scripts/perf/web.mjs --url http://localhost:8091 --size 1920x1080 --out qa/results/perf-web-1080p.json
 node scripts/perf/web.mjs --url http://localhost:8091 --cpu 4      # slow-CPU stand-in
 node scripts/perf/web.mjs --url http://localhost:8091 --chrome /path/to/chromium-87/chrome   # webOS 22 engine
+
+# LG webOS TV (paired with scripts/tv/lg.sh setup <TV_IP>)
+scripts/tv/lg.sh install
+ares-inspect --device MyLGTV --app com.tvphotogallery     # prints http://localhost:<port>/devtools/...; leave it running
+node scripts/perf/web.mjs --devtools http://localhost:<port> \
+  --url file:///media/developer/apps/usr/palm/applications/com.tvphotogallery/index.html \
+  --out qa/results/perf-web-lg-webos22.json
 ```
 
 - The Android runner uses the live API: about 15 requests per run, of 50 an hour.

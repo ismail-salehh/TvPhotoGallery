@@ -6,11 +6,12 @@ import type {
   DomKeyboardEvent,
   Rect,
 } from './webDom';
+import { isBackKey } from './backPress.web';
 import { domDocument, domWindow, isTextInput } from './webDom';
 
 // Makes the keyboard behave like a TV remote: arrows move focus to the
 // nearest focusable in that direction, Enter presses it (react-native-web's
-// Pressable already does that), and Escape/Backspace is back (backPress.web).
+// Pressable already does that), and Back is backPress.web's isBackKey.
 // Tab and Space are swallowed so there is exactly one way to move around.
 
 // react-native-web renders every focusable Pressable with tabindex="0"
@@ -257,7 +258,7 @@ export function useSpatialNavigation(onNavigate: () => void) {
         // Holding OK presses once, as on a remote
         event.preventDefault();
         event.stopPropagation();
-      } else if (event.key === 'Escape' || event.key === 'Backspace') {
+      } else if (isBackKey(event)) {
         setTimeout(() => {
           if (isFocusIdle()) {
             restoreFocus();

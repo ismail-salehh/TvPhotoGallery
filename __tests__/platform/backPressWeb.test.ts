@@ -42,6 +42,40 @@ describe('web addBackPressListener', () => {
     expect(handlers).toEqual([]);
   });
 
+  it('the LG webOS remote’s Back key is Back, whatever name it reports', () => {
+    const listener = jest.fn(() => true);
+    web.addBackPressListener(listener);
+    // webOS 22 reports it by code only
+    expect(
+      press({ key: 'Unidentified', keyCode: 461 }).preventDefault,
+    ).toHaveBeenCalled();
+    // Other browsers name it instead
+    press({ key: 'GoBack' });
+    press({ key: 'BrowserBack', keyCode: 166 });
+    expect(listener).toHaveBeenCalledTimes(3);
+  });
+
+  it('isBackKey: only Back keys, by name or by the webOS code', () => {
+    const key = (k: string, keyCode?: number) =>
+      web.isBackKey({
+        key: k,
+        keyCode,
+        repeat: false,
+        target: null,
+        defaultPrevented: false,
+        preventDefault: () => {},
+        stopPropagation: () => {},
+      });
+    expect(key('Escape')).toBe(true);
+    expect(key('Backspace')).toBe(true);
+    expect(key('GoBack')).toBe(true);
+    expect(key('BrowserBack')).toBe(true);
+    expect(key('Unidentified', 461)).toBe(true);
+    expect(key('Unidentified', 460)).toBe(false);
+    expect(key('Enter', 13)).toBe(false);
+    expect(key('ArrowLeft')).toBe(false);
+  });
+
   it('an unhandled Back keeps the browser default', () => {
     web.addBackPressListener(() => false);
     expect(press({}).preventDefault).not.toHaveBeenCalled();

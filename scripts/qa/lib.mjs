@@ -17,6 +17,11 @@ export function physicalKey(key, rtl) {
   return key;
 }
 
+// The app's page at `base` with `query`: a server root, or an installed
+// app's index.html (file:// on a webOS TV)
+export const pageUrl = (base, query) =>
+  base.endsWith('.html') ? `${base}?${query}` : `${base}/?${query}`;
+
 function resolve(pattern, captures) {
   return pattern.replace(/\$(\w+)/g, (_, name) => captures[name] ?? `$${name}`);
 }

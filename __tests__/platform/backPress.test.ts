@@ -1,4 +1,4 @@
-import { Platform, TVEventControl } from 'react-native';
+import { BackHandler, Platform, TVEventControl } from 'react-native';
 
 import * as native from '../../src/platform/backPress';
 import * as web from '../../src/platform/backPress.web';
@@ -54,5 +54,31 @@ describe('modalRequestCloseIsBack', () => {
   it('counts a native Modal’s close request as Back, but not the web one', () => {
     expect(native.modalRequestCloseIsBack).toBe(true);
     expect(web.modalRequestCloseIsBack).toBe(false);
+  });
+});
+
+describe('exitApp', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('leaves through BackHandler on a TV', () => {
+    const exit = jest
+      .spyOn(BackHandler, 'exitApp')
+      .mockImplementation(() => {});
+    native.exitApp();
+    expect(exit).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes the window on the web, where BackHandler can’t (webOS)', () => {
+    const g = globalThis as Record<string, unknown>;
+    const close = jest.fn();
+    g.close = close;
+    const exit = jest.spyOn(BackHandler, 'exitApp');
+    try {
+      web.exitApp();
+      expect(close).toHaveBeenCalledTimes(1);
+      expect(exit).not.toHaveBeenCalled();
+    } finally {
+      delete g.close;
+    }
   });
 });

@@ -1,11 +1,13 @@
 // Web performance: node scripts/perf/web.mjs --url <production build>
-//   [--chrome path] [--size 1920x1080] [--cpu 4] [--soak minutes]
+//   [--chrome path | --devtools http://localhost:<ares-inspect port>]
+//   [--size 1920x1080] [--cpu 4] [--soak minutes]
 //   [--out results.json]
 // Measures the docs/PERFORMANCE.md budget items in a headless Chrome, API from
 // the QA fixtures plus a generated 2,000-photo album. --cpu slows the CPU.
 import { readFileSync, writeFileSync } from 'node:fs';
 
 import { openChrome, parseArgs, sleep } from '../qa/chrome.mjs';
+import { pageUrl } from '../qa/lib.mjs';
 
 const args = parseArgs(process.argv.slice(2));
 const base = args.url ?? 'http://localhost:8091';
@@ -49,6 +51,7 @@ const generate = key => {
 
 const chrome = await openChrome({
   chrome: args.chrome,
+  devtools: args.devtools,
   width,
   height,
   generate,
@@ -117,7 +120,7 @@ const heap = async () => {
 
 let loads = 0;
 async function open(hash = '') {
-  await send('Page.navigate', { url: `${base}/?perf=${++loads}${hash}` });
+  await send('Page.navigate', { url: pageUrl(base, `perf=${++loads}${hash}`) });
   await waitFor(async () => (await focusedId()) !== null);
 }
 
@@ -268,3 +271,5 @@ if (args.out) {
   writeFileSync(args.out, `${JSON.stringify(result, null, 2)}\n`);
 }
 await chrome.close();
+// An attached browser keeps the DevTools socket open
+process.exit(0);

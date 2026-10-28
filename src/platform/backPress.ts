@@ -26,3 +26,6 @@ export function setBackPressWanted(wanted: boolean) {
 // A native Modal takes the back button itself and reports it through
 // onRequestClose, which must then count as a back press
 export const modalRequestCloseIsBack = true;
+
+// Leaves the app (the exit dialog's Exit)
+export const exitApp = () => BackHandler.exitApp();

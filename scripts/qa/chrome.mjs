@@ -48,9 +48,12 @@ const cors = [
   { name: 'Content-Type', value: 'application/json' },
 ];
 
-// `generate(key)` may answer a request no fixture holds: { total, body }
+// `generate(key)` may answer a request no fixture holds: { total, body }.
+// `devtools` (http://host:port) attaches to a running browser, e.g. a TV
+// through `ares-inspect`, instead of starting one.
 export async function openChrome({
   chrome = 'google-chrome',
+  devtools,
   width,
   height,
   record = false,
@@ -60,26 +63,32 @@ export async function openChrome({
   const fixtures =
     !record && existsSync(FIXTURES) ? JSON.parse(readFileSync(FIXTURES)) : {};
   const recorded = {};
-  const profile = mkdtempSync(join(tmpdir(), 'qa-chrome-'));
-  const port = 9400 + Math.floor(Math.random() * 400);
-  const child = spawn(
-    chrome,
-    [
-      '--headless=new',
-      '--no-sandbox',
-      '--disable-gpu',
-      `--user-data-dir=${profile}`,
-      `--remote-debugging-port=${port}`,
-      `--window-size=${width},${height}`,
-      'about:blank',
-    ],
-    { stdio: 'ignore' },
-  );
+  let profile = null;
+  let child = null;
+  let endpoint = devtools;
+  if (!devtools) {
+    profile = mkdtempSync(join(tmpdir(), 'qa-chrome-'));
+    const port = 9400 + Math.floor(Math.random() * 400);
+    endpoint = `http://127.0.0.1:${port}`;
+    child = spawn(
+      chrome,
+      [
+        '--headless=new',
+        '--no-sandbox',
+        '--disable-gpu',
+        `--user-data-dir=${profile}`,
+        `--remote-debugging-port=${port}`,
+        `--window-size=${width},${height}`,
+        'about:blank',
+      ],
+      { stdio: 'ignore' },
+    );
+  }
 
   let targets;
   for (let i = 0; i < 50 && !targets; i++) {
     try {
-      targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
+      targets = await (await fetch(`${endpoint}/json`)).json();
     } catch {
       await sleep(200);
     }
@@ -205,15 +214,21 @@ export async function openChrome({
   }
 
   await send('Page.enable');
-  // A headless page is never the focused window, so it would get no focus
-  // events; a TV app always has them
-  await send('Emulation.setFocusEmulationEnabled', { enabled: true });
-  await send('Emulation.setDeviceMetricsOverride', {
-    width,
-    height,
-    deviceScaleFactor: 1,
-    mobile: false,
-  });
+  if (devtools) {
+    // A real screen keeps its size; start clean, as a new profile would
+    await send('Network.clearBrowserCache');
+    await evaluate('localStorage.clear()');
+  } else {
+    // A headless page is never the focused window, so it would get no focus
+    // events; a TV app always has them
+    await send('Emulation.setFocusEmulationEnabled', { enabled: true });
+    await send('Emulation.setDeviceMetricsOverride', {
+      width,
+      height,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+  }
 
   return {
     send,
@@ -242,6 +257,12 @@ export async function openChrome({
           `${JSON.stringify({ ...fixtures, ...recorded }, null, 1)}\n`,
         );
         console.log(`recorded ${Object.keys(recorded).length} API answers`);
+      }
+      if (!child) {
+        // The browser isn't ours to stop: hand its requests back to it
+        await send('Fetch.disable');
+        socket.close();
+        return;
       }
       socket.close();
       child.kill();

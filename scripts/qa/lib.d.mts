@@ -18,6 +18,7 @@ export function walkScreen(
   walk: object,
   opts: { rtl: boolean; links: object; budget?: number },
 ): Promise<{ ok: boolean; issues: string[]; items?: number; edges?: number }>;
+export function pageUrl(base: string, query: string): string;
 export function runAll(
   driver: object,
   spec: object,

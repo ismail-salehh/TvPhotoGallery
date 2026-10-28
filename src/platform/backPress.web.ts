@@ -1,11 +1,17 @@
 import type { DomKeyboardEvent } from './webDom';
 import { domWindow, isTextInput } from './webDom';
 
-// In a browser the keyboard stands in for the remote: Escape or Backspace is
-// the back button
+// The LG webOS remote's Back key (the app sets disableBackHistoryAPI)
+const WEBOS_BACK = 461;
+const BACK_KEYS = new Set(['Escape', 'Backspace', 'GoBack', 'BrowserBack']);
+
+// The remote's Back, or Escape/Backspace where a keyboard stands in for it
+export const isBackKey = (event: DomKeyboardEvent) =>
+  BACK_KEYS.has(event.key) || event.keyCode === WEBOS_BACK;
+
 export function addBackPressListener(listener: () => boolean) {
   const onKeyDown = (event: DomKeyboardEvent) => {
-    if (event.key !== 'Escape' && event.key !== 'Backspace') {
+    if (!isBackKey(event)) {
       return;
     }
     if (isTextInput(event.target)) {
@@ -27,6 +33,10 @@ export function addBackPressListener(listener: () => boolean) {
 // The keyboard has no menu key to enable
 export function setBackPressWanted(_wanted: boolean) {}
 
-// The Escape key-down already went through the back handlers; the Modal's
+// The Back key-down already went through the back handlers; the Modal's
 // own Escape-on-key-up would be a second Back
 export const modalRequestCloseIsBack = false;
+
+// react-native-web's BackHandler.exitApp does nothing; a webOS app closes
+// its own window
+export const exitApp = () => domWindow.close();

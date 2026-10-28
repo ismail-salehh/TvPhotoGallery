@@ -1,12 +1,13 @@
 // Web target: node scripts/qa/web.mjs [--url http://localhost:8080]
-//   [--chrome /path/to/chrome] [--size 1920x1080] [--lang en,ar]
+//   [--chrome /path/to/chrome | --devtools http://localhost:<port>]
+//   [--size 1920x1080] [--lang en,ar]
 //   [--only checks|walks] [--out results.json] [--record] [--console]
 // API answers are replayed from qa/fixtures/unsplash.json; --record
 // refreshes them live. The keyboard keys stand in for the remote.
 import { readFileSync, writeFileSync } from 'node:fs';
 
 import { openChrome, parseArgs, sleep } from './chrome.mjs';
-import { runAll } from './lib.mjs';
+import { pageUrl, runAll } from './lib.mjs';
 
 const args = parseArgs(process.argv.slice(2));
 const base = args.url ?? 'http://localhost:8080';
@@ -18,6 +19,7 @@ const spec = JSON.parse(
 
 const chrome = await openChrome({
   chrome: args.chrome,
+  devtools: args.devtools,
   width,
   height,
   record: args.record,
@@ -44,7 +46,7 @@ const driver = {
   // A fresh page each time: a query that changes forces a real load
   async open(start, links) {
     const link = start.startsWith('link:') ? `#/${links[start.slice(5)]}` : '';
-    await send('Page.navigate', { url: `${base}/?qa=${++loads}${link}` });
+    await send('Page.navigate', { url: pageUrl(base, `qa=${++loads}${link}`) });
     await sleep(2500);
   },
   press: chrome.press,
