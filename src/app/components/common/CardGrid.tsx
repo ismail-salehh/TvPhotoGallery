@@ -44,7 +44,6 @@ type CardGridProps<T> = {
   // Off when something else on the screen should keep focus, e.g. the
   // search keyboard while results update under it
   preferFirstFocus?: boolean;
-  initialFocusIndex?: number;
 };
 
 function CardGridView<T extends { id: string }>({
@@ -60,7 +59,6 @@ function CardGridView<T extends { id: string }>({
   columns = DEFAULT_COLUMNS,
   width,
   preferFirstFocus = true,
-  initialFocusIndex = 0,
 }: CardGridProps<T>) {
   const { width: canvasWidth } = useCanvas();
   const gridWidth = width ?? canvasWidth;
@@ -94,17 +92,10 @@ function CardGridView<T extends { id: string }>({
         width={cardWidth}
         onFocus={handleFocus}
         onPress={onItemPress}
-        hasTVPreferredFocus={preferFirstFocus && index === initialFocusIndex}
+        hasTVPreferredFocus={preferFirstFocus && index === 0}
       />
     ),
-    [
-      Card,
-      cardWidth,
-      handleFocus,
-      onItemPress,
-      preferFirstFocus,
-      initialFocusIndex,
-    ],
+    [Card, cardWidth, handleFocus, onItemPress, preferFirstFocus],
   );
 
   // The list's items are rows. Every row is the same height, so any row

@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import type { ListRenderItem } from 'react-native';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
@@ -21,8 +21,6 @@ export const RAIL_HEIGHT = TITLE_HEIGHT + ALBUM_ROW_HEIGHT + spacing.sm;
 // The focused rail sits at the top, with the next one's title and the top
 // of its cards showing below it
 export const RAILS_HEIGHT = RAIL_HEIGHT + 140;
-// How long focus stays on a rail before the rails far from it are hidden
-const RAIL_REST_MS = 500;
 
 type AlbumRailsProps = {
   albums: Album[];
@@ -49,10 +47,6 @@ export const AlbumRails = memo(function AlbumRailsView({
     marginEnd: RAILS_HEIGHT - RAIL_HEIGHT,
   });
 
-  // Low-end TVs: once focus rests, rails away from it aren't drawn. All of
-  // them come back as soon as focus moves.
-  const [restingRail, setRestingRail] = useState<number | null>(null);
-
   const albumsRef = useRef(albums);
   albumsRef.current = albums;
   const handleAlbumFocus = useCallback(
@@ -60,8 +54,6 @@ export const AlbumRails = memo(function AlbumRailsView({
       const rail = Math.floor(albumsRef.current.indexOf(album) / RAIL_SIZE);
       keepInView(rail * RAIL_HEIGHT, RAIL_HEIGHT);
       onAlbumFocus(album);
-      setRestingRail(null);
-      setTimeout(() => setRestingRail(rail), RAIL_REST_MS);
     },
     [keepInView, onAlbumFocus],
   );
@@ -71,12 +63,11 @@ export const AlbumRails = memo(function AlbumRailsView({
       <Rail
         albums={item}
         index={index}
-        hidden={restingRail !== null && Math.abs(index - restingRail) > 1}
         onAlbumFocus={handleAlbumFocus}
         onAlbumPress={onAlbumPress}
       />
     ),
-    [handleAlbumFocus, onAlbumPress, restingRail],
+    [handleAlbumFocus, onAlbumPress],
   );
 
   const getItemLayout = useCallback(
@@ -133,7 +124,6 @@ export const AlbumRails = memo(function AlbumRailsView({
 type RailProps = {
   albums: Album[];
   index: number;
-  hidden: boolean;
   onAlbumFocus: (album: Album) => void;
   onAlbumPress: (album: Album) => void;
 };
@@ -141,7 +131,6 @@ type RailProps = {
 const Rail = memo(function RailView({
   albums,
   index,
-  hidden,
   onAlbumFocus,
   onAlbumPress,
 }: RailProps) {
@@ -159,15 +148,13 @@ const Rail = memo(function RailView({
       >
         {t('home.rail', { from, to: from + albums.length - 1 })}
       </Text>
-      <View style={hidden && styles.hidden}>
-        <AlbumRow
-          albums={albums}
-          onAlbumFocus={onAlbumFocus}
-          onAlbumPress={onAlbumPress}
-          contentInset={margins.start}
-          preferFirstFocus={index === 0}
-        />
-      </View>
+      <AlbumRow
+        albums={albums}
+        onAlbumFocus={onAlbumFocus}
+        onAlbumPress={onAlbumPress}
+        contentInset={margins.start}
+        preferFirstFocus={index === 0}
+      />
     </View>
   );
 });
@@ -198,9 +185,6 @@ const styles = StyleSheet.create({
   },
   rail: {
     height: RAIL_HEIGHT,
-  },
-  hidden: {
-    display: 'none',
   },
   title: {
     color: colors.text,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import type { ReactTestInstance } from 'react-test-renderer';
 import { act } from 'react-test-renderer';
 
@@ -80,6 +80,47 @@ describe('Home album rails', () => {
       )
       .map(n => n.props.testID);
     expect(new Set(preferred)).toEqual(new Set(['album-card-a1']));
+  });
+
+  // Regression: a stale timer from an earlier rail hid the one holding focus
+  it('never hide the focused card’s rail, however fast focus moves', async () => {
+    const r = await renderInApp(<Harness initial={albums(40)} />);
+    const scroller = railList(r).findAllByType(ScrollView)[0];
+    act(() =>
+      scroller.props.onLayout({
+        nativeEvent: { layout: { width: 1920, height: RAILS_HEIGHT } },
+      }),
+    );
+    act(() => scroller.props.onContentSizeChange(1920, 4 * RAIL_HEIGHT));
+    act(() =>
+      scroller.props.onScroll({
+        nativeEvent: {
+          contentOffset: { x: 0, y: 3 * RAIL_HEIGHT },
+          layoutMeasurement: { width: 1920, height: RAILS_HEIGHT },
+          contentSize: { width: 1920, height: 4 * RAIL_HEIGHT },
+        },
+        timeStamp: 1,
+      }),
+    );
+    await act(async () => {
+      await new Promise<void>(done => setTimeout(() => done(), 50));
+    });
+    // The probe needs a rendered card two or more rails from the first
+    expect(card(r, 'a31')).toBeDefined();
+    const wait = (ms: number) =>
+      act(async () => {
+        await new Promise<void>(done => setTimeout(() => done(), ms));
+      });
+    act(() => card(r, 'a1').props.onFocus());
+    await wait(200);
+    act(() => card(r, 'a31').props.onFocus());
+    await wait(700);
+    const hidden = r.root.findAll(
+      n =>
+        n.type === View &&
+        StyleSheet.flatten(n.props.style)?.display === 'none',
+    );
+    expect(hidden).toEqual([]);
   });
 
   it('keep rails scrolled out of view attached, so Up can reach them on Android', async () => {
