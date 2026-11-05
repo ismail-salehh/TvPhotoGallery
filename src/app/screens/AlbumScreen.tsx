@@ -17,6 +17,8 @@ import { colors, lineHeightFor, spacing } from '../theme';
 type AlbumScreenProps = {
   // Passed from the card that opened it, so the header shows immediately
   album: Album;
+  // The photo that takes focus when the grid opens
+  initialIndex?: number;
   onBack: () => void;
   // Opens the viewer on `index` with every photo loaded so far
   onOpenPhoto?: (photos: Photo[], index: number) => void;
@@ -26,6 +28,7 @@ type AlbumScreenProps = {
 
 export function AlbumScreen({
   album,
+  initialIndex = 0,
   onBack,
   onOpenPhoto,
   onPlaySlideshow,
@@ -103,6 +106,7 @@ export function AlbumScreen({
           <ErrorBoundary id="album-grid">
             <PhotoGrid
               photos={photos}
+              initialFocusIndex={initialIndex}
               onPhotoPress={handlePhotoPress}
               onEndReached={loadMore}
               contentInset={gutterLeft}

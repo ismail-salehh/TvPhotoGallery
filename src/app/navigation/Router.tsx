@@ -163,6 +163,7 @@ export function Router() {
                   openSlideshow,
                   goBack: pop,
                   onPhotoChange,
+                  index,
                 })}
               </ErrorBoundary>
               {index === 0 && (
@@ -196,6 +197,7 @@ export function Router() {
 }
 
 type Navigation = {
+  index: number;
   openAlbum: (album: Album) => void;
   openSearch: (album?: Album) => void;
   openSettings: () => void;
@@ -219,6 +221,7 @@ function renderRoute(route: Route, navigation: Navigation) {
       return (
         <AlbumScreen
           album={route.album}
+          initialIndex={navigation.index}
           onBack={navigation.goBack}
           onOpenPhoto={navigation.openPhoto}
           onPlaySlideshow={navigation.openSlideshow}
